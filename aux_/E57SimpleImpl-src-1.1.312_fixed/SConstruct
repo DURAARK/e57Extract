@@ -1,0 +1,7 @@
+env = Environment(
+	CCFLAGS = '-Wall -O2 -DLINUX -Wno-unused-variable -Wno-unused-but-set-variable -Wno-switch',
+	CPPPATH = ['include', '/usr/include/e57'],
+)
+
+objs = [Glob('src/refimpl/*.cpp')]
+env.SharedLibrary('E57SimpleImpl', objs)

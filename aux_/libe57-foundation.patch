@@ -1,0 +1,20 @@
+64,65c64,65
+< set(Boost_USE_STATIC_LIBS   ON)
+< set(Boost_USE_STATIC_RUNTIME ON)
+---
+> set(Boost_USE_STATIC_LIBS   OFF)
+> set(Boost_USE_STATIC_RUNTIME OFF)
+83c83
+< set(Xerces_USE_STATIC_LIBS On)
+---
+> set(Xerces_USE_STATIC_LIBS OFF)
+131c131
+< add_library( E57RefImpl STATIC
+---
+> add_library( E57RefImpl SHARED
+154c154
+< add_library( time_conversion STATIC
+---
+> add_library( time_conversion SHARED
+244a245
+>     LIBRARY DESTINATION lib
