@@ -58,12 +58,19 @@ if (Boost_FOUND AND EIGEN_FOUND AND CEREAL_FOUND AND E57REF_FOUND AND E57SIMPLE_
 	link_directories(${Boost_LIBRARY_DIRS})
 	add_library(e57_metadata SHARED ${cpplib} ${cpplibh})
 	if(CMAKE_COMPILER_IS_GNUCXX)
-		target_link_libraries(e57_metadata ${Boost_LIBRARIES} ${E57REF_LIBRARIES} ${E57SIMPLE_LIBRARIES} ${Xerces_LIBRARY} "dl")
+		target_link_libraries(e57_metadata ${Boost_LIBRARIES} ${E57SIMPLE_LIBRARIES} ${Xerces_LIBRARY} "dl")
 	else()
 		target_link_libraries(e57_metadata ${Boost_LIBRARIES} ${E57REF_LIBRARIES} ${Xerces_LIBRARY})
 	endif()
 	add_executable(test_cpplib ${testcpp})
-	target_link_libraries(test_cpplib e57_metadata)
+	if(CMAKE_COMPILER_IS_GNUCXX)
+		# MH: I had to tinker around with linker errors on linux, because symbols from the the statically build 
+		# E57RefImpl library where not imported. The following '--whole-archive' magic solves the issue.
+		target_link_libraries(test_cpplib e57_metadata -Wl,--whole-archive ${E57REF_LIBRARIES} -Wl,--no-whole-archive)
+	else()
+		target_link_libraries(test_cpplib e57_metadata)
+	endif()
+	
 
 	# install binary
 	install (TARGETS e57_metadata DESTINATION bin)
